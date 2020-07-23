@@ -1,3 +1,10 @@
+.post {
+    background-color: white;
+    max-width: 750px;
+}
+
+
+
 .post___image {
     width: 100%;
     object-fit: contain;
@@ -5,4 +12,15 @@
 
 .post___text {
     font-weight: normal;
+    padding: 10px;
+}
+
+.post___header {
+    display: flex;
+    align-items: center;
+    padding: 10px 5px;
+}
+
+.post___avatar {
+    margin: 5px;
 }
