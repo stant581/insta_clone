@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Post from "./Components/Post";
 
+import {db} from './Firebase/firebase'
+
 function App() {
   
-  const [posts, setPosts] = useState([
-    {
-      username: "stant581",
-      caption: "Wow! It worked",
-      avatarUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTVl1evKmf0nqpC163jJKNJqNaI3aDOfkhB-w&usqp=CAU',
-      imageUrl : 'https://pluspng.com/img-png/dog-png-dog-png-image-267.png'
-    },
-    {
-      username: "chan",
-      caption: "Wow! Dope",
-      avatarUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSvD001uSAaW3dIrbTqbh7zB-j84b278ZMkgg&usqp=CAU',
-      imageUrl : 'https://pluspng.com/img-png/dog-png-dog-png-image-267.png'
-    }
-  ]);
+  const [posts, setPosts] = useState([]);
 
+//useEffect : Runs a peiece of code on a specific condition
 
+useEffect( ()=> {
+  //if left black this will load just once
+  // if I put posts here then whenever the posts change, it reloads
+  db.collection('posts').onSnapshot(snapshot => {
+    //It takes a snapshot whenever data changes
+    setPosts(snapshot.docs.map( doc => ({
+      id: doc.id,
+      post: doc.data()
+    })))
+  })
+}, [])
 
 
   return (
@@ -32,8 +33,8 @@ function App() {
     <h1> Hey there </h1>
 
     {
-      posts.map( post => (
-        <Post username = {post.username} caption={post.caption} avatarUrl = {post.avatarUrl} imageUrl={post.imageUrl}/>
+      posts.map(({id, post})=> (
+        <Post key={id} username = {post.username} caption={post.caption} avatarUrl = {post.avatarUrl} imageUrl={post.imageUrl}/>
       ))
     }
 
